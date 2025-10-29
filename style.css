@@ -1,0 +1,332 @@
+:root {
+  color-scheme: light dark;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background-color: #f7f7fb;
+  color: #222;
+}
+
+body {
+  margin: 0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-height: 100vh;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+#app {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(240px, auto) minmax(220px, 1fr) minmax(220px, 1fr);
+  grid-template-areas:
+    "howto howto howto"
+    "canvas properties mohr"
+    "controls properties mohr";
+  align-items: flex-start;
+  justify-content: center;
+}
+
+#shapeCanvas {
+  grid-area: canvas;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  max-width: 400px;
+  border: 1px solid #bbb;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  cursor: crosshair;
+  touch-action: none;
+  display: block;
+  justify-self: center;
+}
+
+#howToSection {
+  grid-area: howto;
+}
+
+#controlsSection {
+  grid-area: controls;
+}
+
+#metrics {
+  grid-area: properties;
+  align-self: flex-start;
+}
+
+#mohrSection {
+  grid-area: mohr;
+  align-self: flex-start;
+}
+
+section {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+section h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.controls {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.controls input {
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.4rem;
+  border: 1px solid #bbb;
+  font-size: 0.95rem;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+button {
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.5rem;
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button.secondary {
+  background: #f3f4f6;
+  color: #1f2937;
+  border-color: #d1d5db;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+#status {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  background-color: #eff6ff;
+  border-left: 4px solid #2563eb;
+  padding: 0.75rem 1rem;
+  border-radius: 0.4rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.45rem 0.3rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.9rem;
+}
+
+th {
+  font-size: 0.85rem;
+  color: #4b5563;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.inertia-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.inertia-table thead th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4b5563;
+}
+
+.inertia-table tbody th {
+  text-align: left;
+  font-size: 0.95rem;
+  color: #111827;
+}
+
+.inertia-table tbody td {
+  font-variant-numeric: tabular-nums;
+}
+
+.inertia-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.properties-summary {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.92rem;
+}
+
+.summary-label {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.summary-value {
+  font-variant-numeric: tabular-nums;
+}
+
+#mohrContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+#mohrCanvas {
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background: #ffffff;
+}
+
+.mohr-legend {
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: center;
+  color: #1f2937;
+}
+
+.mohr-caption {
+  font-size: 0.82rem;
+  line-height: 1.35;
+  text-align: center;
+  color: #4b5563;
+}
+
+@media (max-width: 900px) {
+  #app {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "howto"
+      "canvas"
+      "controls"
+      "properties"
+      "mohr";
+  }
+
+  #shapeCanvas {
+    max-width: 100%;
+    justify-self: stretch;
+  }
+}
+
+@media (max-width: 600px) {
+  #mohrCanvas {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+
+  #shapeCanvas {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  section {
+    background-color: #1f2937;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  #mohrCanvas {
+    background-color: #0f172a;
+    border-color: #334155;
+  }
+
+  .inertia-table thead th {
+    color: #94a3b8;
+  }
+
+  .inertia-table tbody th {
+    color: #e5e7eb;
+  }
+
+  .properties-summary {
+    border-top-color: #374151;
+  }
+
+  .summary-label {
+    color: #f9fafb;
+  }
+
+  .mohr-legend {
+    color: #f9fafb;
+  }
+
+  .mohr-caption {
+    color: #e5e7eb;
+  }
+
+  button.secondary {
+    background: #374151;
+    color: #f9fafb;
+    border-color: #4b5563;
+  }
+
+  th,
+  td {
+    border-bottom-color: #374151;
+  }
+
+  #status {
+    background-color: rgba(37, 99, 235, 0.2);
+    border-left-color: #60a5fa;
+  }
+}

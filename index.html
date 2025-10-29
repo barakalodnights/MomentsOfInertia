@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>2D Moment of Inertia Explorer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Moment of Inertia Explorer</h1>
+  <div id="app">
+    <section id="howToSection" aria-live="polite">
+      <h2>How to use</h2>
+      <div id="status">
+        Click on the canvas to add vertices in order. Use three or more points, then double-click or press "Complete shape" to close the polygon. Drag the inputs below to explore how the centroid and second moments change. Press "Reset" to start again.
+      </div>
+    </section>
+
+    <canvas id="shapeCanvas" width="680" height="680" aria-label="Drawing canvas"></canvas>
+
+    <section id="controlsSection">
+      <h2>Controls</h2>
+      <div class="button-group">
+        <button id="completeBtn" disabled>Complete shape</button>
+        <button id="resetBtn" class="secondary">Reset</button>
+        <button id="useCentroidBtn" class="secondary" disabled>Use centroid as reference</button>
+      </div>
+      <div class="controls">
+        <label>
+          Reference x (units)
+          <input id="refX" type="number" step="0.1" value="0">
+        </label>
+        <label>
+          Reference y (units)
+          <input id="refY" type="number" step="0.1" value="0">
+        </label>
+        <label>
+          Rotate axes (&deg; counterclockwise)
+          <input id="rotation" type="number" step="1" value="0">
+        </label>
+      </div>
+    </section>
+
+    <section id="metrics">
+      <h2>Properties</h2>
+      <table class="inertia-table">
+        <thead>
+          <tr>
+            <th scope="col">Moment</th>
+            <th scope="col">Reference</th>
+            <th scope="col">Centroid</th>
+            <th scope="col">Rotated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Ix</th>
+            <td id="ixRefCell">&mdash;</td>
+            <td id="ixCentroidCell">&mdash;</td>
+            <td id="ixRotCell">&mdash;</td>
+          </tr>
+          <tr>
+            <th scope="row">Iy</th>
+            <td id="iyRefCell">&mdash;</td>
+            <td id="iyCentroidCell">&mdash;</td>
+            <td id="iyRotCell">&mdash;</td>
+          </tr>
+          <tr>
+            <th scope="row">Ixy</th>
+            <td id="ixyRefCell">&mdash;</td>
+            <td id="ixyCentroidCell">&mdash;</td>
+            <td id="ixyRotCell">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="properties-summary">
+        <div class="summary-row">
+          <span class="summary-label">Area</span>
+          <span class="summary-value" id="areaCell">&mdash;</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Centroid</span>
+          <span class="summary-value" id="centroidCell">&mdash;</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Polar J</span>
+          <span class="summary-value" id="polarCell">&mdash;</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="mohrSection">
+      <h2>Mohr's Circle</h2>
+      <div id="mohrContainer">
+        <div class="mohr-legend" id="mohrLegend">Add a closed shape to view Mohr's circle.</div>
+        <canvas id="mohrCanvas" width="260" height="260" aria-label="Mohr's circle diagram"></canvas>
+        <div class="mohr-caption">Horizontal axis: I (units^4)<br>Vertical axis: -Ixy (units^4)</div>
+      </div>
+    </section>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
