@@ -616,9 +616,10 @@ select {
 .race-grid {
   display: grid;
   gap: 1.2rem;
-  grid-template-columns: minmax(240px, 320px) minmax(240px, 320px) minmax(260px, 360px);
+  grid-template-columns: minmax(260px, 360px) minmax(260px, 360px) minmax(380px, 640px);
   grid-template-areas:
-    "ramp participants results";
+    "ramp participants visualizer"
+    "results results visualizer";
   align-items: start;
 }
 
@@ -632,6 +633,53 @@ select {
 
 #resultsSection {
   grid-area: results;
+}
+
+#visualizerSection {
+  grid-area: visualizer;
+}
+
+#raceCanvas {
+  width: 100%;
+  max-width: 680px;
+  border-radius: 0.75rem;
+  border: 1px solid #dbeafe;
+  background-color: #f8fafc;
+  display: block;
+  margin: 0 auto;
+}
+
+.race-status {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  flex-wrap: wrap;
+}
+
+.race-status .status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.race-status .label {
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.race-status .value {
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.race-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
 .race-card {
@@ -791,8 +839,9 @@ select {
   .race-grid {
     grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr);
     grid-template-areas:
-      "ramp ramp"
-      "participants results";
+      "ramp visualizer"
+      "participants visualizer"
+      "results results";
   }
 }
 
@@ -802,6 +851,7 @@ select {
     grid-template-areas:
       "ramp"
       "participants"
+      "visualizer"
       "results";
   }
 
@@ -847,5 +897,18 @@ select {
 
   .results-table .empty {
     color: #9ca3af;
+  }
+
+  #raceCanvas {
+    background-color: #0f172a;
+    border-color: #334155;
+  }
+
+  .race-status .label {
+    color: #cbd5f5;
+  }
+
+  .race-status .value {
+    color: #60a5fa;
   }
 }

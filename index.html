@@ -193,7 +193,7 @@
     <section id="racePanel" class="tab-panel" role="tabpanel" aria-labelledby="raceTab" aria-hidden="true">
       <div id="raceApp">
         <header class="race-header">
-          <h2>Rolling Race Simulator (under construction)</h2>
+          <h2>Rolling Race Simulator</h2>
           <p>Compare solid spheres, cylinders, and hoops as they roll without slipping down the same ramp.</p>
         </header>
 
@@ -216,7 +216,7 @@
                 </div>
               </label>
               <label>
-                Gravity (m/s²)
+                Gravity (m/s^2)
                 <div class="control-pair">
                   <input id="gravitySlider" type="range" min="1" max="20" step="0.1" value="9.81">
                   <input id="gravityInput" type="number" min="1" max="20" step="0.01" value="9.81">
@@ -230,7 +230,7 @@
               </div>
               <div>
                 <span class="label">Acceleration due to gravity</span>
-                <span class="value" id="gravityDisplay">9.81 m/s²</span>
+                <span class="value" id="gravityDisplay">9.81 m/s^2</span>
               </div>
             </div>
           </section>
@@ -253,6 +253,27 @@
             </div>
           </section>
 
+          <section id="visualizerSection" class="race-card">
+            <h3>Race Visualizer</h3>
+            <canvas id="raceCanvas" width="720" height="360" aria-label="Rolling race animation"></canvas>
+            <div class="race-status">
+              <div class="status-item">
+                <span class="label">Elapsed</span>
+                <span class="value" id="raceTimeDisplay">0.00 s</span>
+              </div>
+              <div class="status-item">
+                <span class="label">Leader</span>
+                <span class="value" id="raceLeaderDisplay">--</span>
+              </div>
+            </div>
+            <div class="race-controls">
+              <button id="racePlayBtn" type="button">Play</button>
+              <button id="racePauseBtn" type="button" class="secondary" disabled>Pause</button>
+              <button id="raceResetBtn" type="button" class="secondary">Reset</button>
+            </div>
+            <p class="hint">Objects roll without slipping; race assumes no energy loss and pure rolling.</p>
+          </section>
+
           <section id="resultsSection" class="race-card">
             <h3>Predicted Results</h3>
             <table class="results-table">
@@ -260,7 +281,7 @@
                 <tr>
                   <th scope="col">Rank</th>
                   <th scope="col">Object</th>
-                  <th scope="col">Acceleration (m/s²)</th>
+                  <th scope="col">Acceleration (m/s^2)</th>
                   <th scope="col">Time (s)</th>
                   <th scope="col">Final speed (m/s)</th>
                 </tr>
