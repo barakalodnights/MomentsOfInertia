@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Moment of Inertia Spin Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="page-header">
+    <h1>Moment of Inertia Spin Lab</h1>
+    <p class="tagline">Draw a shape, set the applied moment about the z-axis, and watch the resulting rotation.</p>
+  </header>
+
+  <main id="app">
+    <section id="drawSectionA" class="draw-panel">
+      <div class="section-header">
+        <h2>Shape A</h2>
+        <p>Click to place vertices in the x-y plane. Add at least three points, then double-click or press "Complete shape A" to close the polygon.</p>
+      </div>
+      <canvas id="shapeCanvasA" width="600" height="600" aria-label="Drawing canvas for shape A"></canvas>
+      <div class="button-row">
+        <button id="completeBtnA" disabled>Complete shape A</button>
+        <button id="resetShapeBtnA" class="secondary">Reset shape A</button>
+      </div>
+      <div class="shape-info">
+        <div class="info-row">
+          <span class="label">I<sub>zz</sub> about origin</span>
+          <span id="izzDisplayA" class="value">-- units^4</span>
+        </div>
+        <div class="info-row">
+          <span class="label">&alpha;</span>
+          <span id="alphaDisplayA" class="value">-- rad/s^2</span>
+        </div>
+        <div class="info-row">
+          <span class="label">&omega;</span>
+          <span id="omegaDisplayA" class="value">0 rad/s</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="drawSectionB" class="draw-panel">
+      <div class="section-header">
+        <h2>Shape B</h2>
+        <p>Repeat the process for Shape B. Each shape may have different geometry, making it easy to compare rotational responses.</p>
+      </div>
+      <canvas id="shapeCanvasB" width="600" height="600" aria-label="Drawing canvas for shape B"></canvas>
+      <div class="button-row">
+        <button id="completeBtnB" disabled>Complete shape B</button>
+        <button id="resetShapeBtnB" class="secondary">Reset shape B</button>
+      </div>
+      <div class="shape-info">
+        <div class="info-row">
+          <span class="label">I<sub>zz</sub> about origin</span>
+          <span id="izzDisplayB" class="value">-- units^4</span>
+        </div>
+        <div class="info-row">
+          <span class="label">&alpha;</span>
+          <span id="alphaDisplayB" class="value">-- rad/s^2</span>
+        </div>
+        <div class="info-row">
+          <span class="label">&omega;</span>
+          <span id="omegaDisplayB" class="value">0 rad/s</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="controlSection">
+      <div class="section-header">
+        <h2>Applied Moment Controls</h2>
+        <p>Set the magnitude and direction of the applied moment about the z-axis through the origin. Positive values spin counterclockwise.</p>
+      </div>
+      <label class="control">
+        <span class="control-label">Moment about z-axis (N*m)</span>
+        <div class="control-pair">
+          <input id="momentSlider" type="range" min="-5" max="5" step="0.1" value="1">
+          <input id="momentInput" type="number" min="-5" max="5" step="0.1" value="1">
+        </div>
+      </label>
+      <div class="button-row">
+        <button id="playBtn" disabled>Play</button>
+        <button id="pauseBtn" class="secondary" disabled>Pause</button>
+        <button id="resetMotionBtn" class="secondary">Reset motion</button>
+      </div>
+      <div class="status" id="statusMessage">Draw and complete both shapes to enable the animation.</div>
+    </section>
+
+  </main>
+
+  <footer class="page-footer">
+    <p>Use the motion controls to explore how the same applied moment leads to different rotational responses depending on the moment of inertia.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
