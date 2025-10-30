@@ -6,97 +6,284 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Moment of Inertia Explorer</h1>
-  <div id="app">
-    <section id="howToSection" aria-live="polite">
-      <h2>How to use</h2>
-      <div id="status">
-        Click on the canvas to add vertices in order. Use three or more points, then double-click or press "Complete shape" to close the polygon. Drag the inputs below to explore how the centroid and second moments change. Press "Reset" to start again.
+  <header class="page-header">
+    <h1>Moment of Inertia Studio</h1>
+    <nav class="tablist" role="tablist" aria-label="Explorer selection">
+      <button id="areaTab" class="tab-button is-active" type="button" role="tab" aria-selected="true" aria-controls="areaPanel" data-tab="area">Section Explorer</button>
+      <button id="dynamicsTab" class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="dynamicsPanel" data-tab="dynamics">Rotational Dynamics</button>
+      <button id="raceTab" class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="racePanel" data-tab="race">Rolling Race</button>
+    </nav>
+  </header>
+
+  <main class="page-main">
+    <section id="areaPanel" class="tab-panel is-active" role="tabpanel" aria-labelledby="areaTab" aria-hidden="false">
+      <div id="areaExplorer">
+        <section id="howToSection" aria-live="polite">
+          <h2>How to use</h2>
+          <div id="status">
+            Click on the canvas to add vertices in order. Use three or more points, then double-click or press "Complete shape" to close the polygon. Drag the inputs below to explore how the centroid and second moments change. Press "Reset" to start again.
+          </div>
+        </section>
+
+        <canvas id="shapeCanvas" width="680" height="680" aria-label="Drawing canvas"></canvas>
+
+        <section id="controlsSection">
+          <h2>Controls</h2>
+          <div class="button-group">
+            <button id="completeBtn" disabled>Complete shape</button>
+            <button id="resetBtn" class="secondary">Reset</button>
+            <button id="useCentroidBtn" class="secondary" disabled>Use centroid as reference</button>
+          </div>
+          <div class="controls">
+            <label>
+              Reference x (units)
+              <input id="refX" type="number" step="0.1" value="0">
+            </label>
+            <label>
+              Reference y (units)
+              <input id="refY" type="number" step="0.1" value="0">
+            </label>
+            <label>
+              Rotate axes (&deg; counterclockwise)
+              <input id="rotation" type="number" step="1" value="0">
+            </label>
+          </div>
+        </section>
+
+        <section id="metrics">
+          <h2>Properties</h2>
+          <table class="inertia-table">
+            <thead>
+              <tr>
+                <th scope="col">Moment</th>
+                <th scope="col">Reference</th>
+                <th scope="col">Centroid</th>
+                <th scope="col">Rotated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Ix</th>
+                <td id="ixRefCell">&mdash;</td>
+                <td id="ixCentroidCell">&mdash;</td>
+                <td id="ixRotCell">&mdash;</td>
+              </tr>
+              <tr>
+                <th scope="row">Iy</th>
+                <td id="iyRefCell">&mdash;</td>
+                <td id="iyCentroidCell">&mdash;</td>
+                <td id="iyRotCell">&mdash;</td>
+              </tr>
+              <tr>
+                <th scope="row">Ixy</th>
+                <td id="ixyRefCell">&mdash;</td>
+                <td id="ixyCentroidCell">&mdash;</td>
+                <td id="ixyRotCell">&mdash;</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="properties-summary">
+            <div class="summary-row">
+              <span class="summary-label">Area</span>
+              <span class="summary-value" id="areaCell">&mdash;</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Centroid</span>
+              <span class="summary-value" id="centroidCell">&mdash;</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Polar J</span>
+              <span class="summary-value" id="polarCell">&mdash;</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="mohrSection">
+          <h2>Mohr's Circle</h2>
+          <div id="mohrContainer">
+            <div class="mohr-legend" id="mohrLegend">Add a closed shape to view Mohr's circle.</div>
+            <canvas id="mohrCanvas" width="260" height="260" aria-label="Mohr's circle diagram"></canvas>
+            <div class="mohr-caption">Horizontal axis: I (units^4)<br>Vertical axis: -Ixy (units^4)</div>
+          </div>
+        </section>
       </div>
     </section>
 
-    <canvas id="shapeCanvas" width="680" height="680" aria-label="Drawing canvas"></canvas>
-
-    <section id="controlsSection">
-      <h2>Controls</h2>
-      <div class="button-group">
-        <button id="completeBtn" disabled>Complete shape</button>
-        <button id="resetBtn" class="secondary">Reset</button>
-        <button id="useCentroidBtn" class="secondary" disabled>Use centroid as reference</button>
-      </div>
-      <div class="controls">
-        <label>
-          Reference x (units)
-          <input id="refX" type="number" step="0.1" value="0">
-        </label>
-        <label>
-          Reference y (units)
-          <input id="refY" type="number" step="0.1" value="0">
-        </label>
-        <label>
-          Rotate axes (&deg; counterclockwise)
-          <input id="rotation" type="number" step="1" value="0">
-        </label>
-      </div>
-    </section>
-
-    <section id="metrics">
-      <h2>Properties</h2>
-      <table class="inertia-table">
-        <thead>
-          <tr>
-            <th scope="col">Moment</th>
-            <th scope="col">Reference</th>
-            <th scope="col">Centroid</th>
-            <th scope="col">Rotated</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Ix</th>
-            <td id="ixRefCell">&mdash;</td>
-            <td id="ixCentroidCell">&mdash;</td>
-            <td id="ixRotCell">&mdash;</td>
-          </tr>
-          <tr>
-            <th scope="row">Iy</th>
-            <td id="iyRefCell">&mdash;</td>
-            <td id="iyCentroidCell">&mdash;</td>
-            <td id="iyRotCell">&mdash;</td>
-          </tr>
-          <tr>
-            <th scope="row">Ixy</th>
-            <td id="ixyRefCell">&mdash;</td>
-            <td id="ixyCentroidCell">&mdash;</td>
-            <td id="ixyRotCell">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="properties-summary">
-        <div class="summary-row">
-          <span class="summary-label">Area</span>
-          <span class="summary-value" id="areaCell">&mdash;</span>
+    <section id="dynamicsPanel" class="tab-panel" role="tabpanel" aria-labelledby="dynamicsTab" aria-hidden="true">
+      <div id="dynamicsApp">
+        <div class="panel-heading">
+          <h2>Rotational Dynamics Explorer</h2>
+          <p>Draw two shapes, apply a moment about the z-axis through the origin, and compare their rotational response.</p>
         </div>
-        <div class="summary-row">
-          <span class="summary-label">Centroid</span>
-          <span class="summary-value" id="centroidCell">&mdash;</span>
-        </div>
-        <div class="summary-row">
-          <span class="summary-label">Polar J</span>
-          <span class="summary-value" id="polarCell">&mdash;</span>
-        </div>
+
+        <section id="drawSectionA" class="draw-panel">
+          <div class="section-header">
+            <h3>Shape A</h3>
+            <p>Click to place vertices in the x-y plane. Add at least three points, then double-click or press "Complete shape A" to close the polygon.</p>
+          </div>
+          <canvas id="shapeCanvasA" width="600" height="600" aria-label="Drawing canvas for shape A"></canvas>
+          <div class="button-row">
+            <button id="completeBtnA" disabled>Complete shape A</button>
+            <button id="resetShapeBtnA" class="secondary">Reset shape A</button>
+          </div>
+          <div class="shape-info">
+            <div class="info-row">
+              <span class="label">I<sub>zz</sub> about origin</span>
+              <span id="izzDisplayA" class="value">-- units^4</span>
+            </div>
+            <div class="info-row">
+              <span class="label">&alpha;</span>
+              <span id="alphaDisplayA" class="value">-- rad/s^2</span>
+            </div>
+            <div class="info-row">
+              <span class="label">&omega;</span>
+              <span id="omegaDisplayA" class="value">0 rad/s</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="drawSectionB" class="draw-panel">
+          <div class="section-header">
+            <h3>Shape B</h3>
+            <p>Repeat the process for Shape B. Each shape may have different geometry, making it easy to compare rotational responses.</p>
+          </div>
+          <canvas id="shapeCanvasB" width="600" height="600" aria-label="Drawing canvas for shape B"></canvas>
+          <div class="button-row">
+            <button id="completeBtnB" disabled>Complete shape B</button>
+            <button id="resetShapeBtnB" class="secondary">Reset shape B</button>
+          </div>
+          <div class="shape-info">
+            <div class="info-row">
+              <span class="label">I<sub>zz</sub> about origin</span>
+              <span id="izzDisplayB" class="value">-- units^4</span>
+            </div>
+            <div class="info-row">
+              <span class="label">&alpha;</span>
+              <span id="alphaDisplayB" class="value">-- rad/s^2</span>
+            </div>
+            <div class="info-row">
+              <span class="label">&omega;</span>
+              <span id="omegaDisplayB" class="value">0 rad/s</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="controlSection">
+          <div class="section-header">
+            <h3>Applied Moment Controls</h3>
+            <p>Set the magnitude and direction of the applied moment about the origin. Positive values spin counterclockwise.</p>
+          </div>
+          <label class="control">
+            <span class="control-label">Moment about z-axis (N*m)</span>
+            <div class="control-pair">
+              <input id="momentSlider" type="range" min="-5" max="5" step="0.1" value="1">
+              <input id="momentInput" type="number" min="-5" max="5" step="0.1" value="1">
+            </div>
+          </label>
+          <div class="button-row">
+            <button id="playBtn" disabled>Play</button>
+            <button id="pauseBtn" class="secondary" disabled>Pause</button>
+            <button id="resetMotionBtn" class="secondary">Reset motion</button>
+          </div>
+          <div class="status" id="statusMessage">Draw and complete both shapes to enable the animation.</div>
+        </section>
       </div>
     </section>
 
-    <section id="mohrSection">
-      <h2>Mohr's Circle</h2>
-      <div id="mohrContainer">
-        <div class="mohr-legend" id="mohrLegend">Add a closed shape to view Mohr's circle.</div>
-        <canvas id="mohrCanvas" width="260" height="260" aria-label="Mohr's circle diagram"></canvas>
-        <div class="mohr-caption">Horizontal axis: I (units^4)<br>Vertical axis: -Ixy (units^4)</div>
+    <section id="racePanel" class="tab-panel" role="tabpanel" aria-labelledby="raceTab" aria-hidden="true">
+      <div id="raceApp">
+        <header class="race-header">
+          <h2>Rolling Race Simulator (under construction)</h2>
+          <p>Compare solid spheres, cylinders, and hoops as they roll without slipping down the same ramp.</p>
+        </header>
+
+        <div class="race-grid">
+          <section id="rampSettings" class="race-card">
+            <h3>Ramp Settings</h3>
+            <div class="control-group">
+              <label>
+                Ramp length (m)
+                <div class="control-pair">
+                  <input id="rampLengthSlider" type="range" min="1" max="10" step="0.1" value="3">
+                  <input id="rampLengthInput" type="number" min="1" max="10" step="0.1" value="3">
+                </div>
+              </label>
+              <label>
+                Ramp angle (&deg;)
+                <div class="control-pair">
+                  <input id="rampAngleSlider" type="range" min="5" max="40" step="0.5" value="15">
+                  <input id="rampAngleInput" type="number" min="5" max="40" step="0.5" value="15">
+                </div>
+              </label>
+              <label>
+                Gravity (m/s²)
+                <div class="control-pair">
+                  <input id="gravitySlider" type="range" min="1" max="20" step="0.1" value="9.81">
+                  <input id="gravityInput" type="number" min="1" max="20" step="0.01" value="9.81">
+                </div>
+              </label>
+            </div>
+            <div class="ramp-summary">
+              <div>
+                <span class="label">Vertical drop</span>
+                <span class="value" id="verticalDropDisplay">0.78 m</span>
+              </div>
+              <div>
+                <span class="label">Acceleration due to gravity</span>
+                <span class="value" id="gravityDisplay">9.81 m/s²</span>
+              </div>
+            </div>
+          </section>
+
+          <section id="participantsSection" class="race-card">
+            <div class="participants-header">
+              <h3>Participants</h3>
+              <button id="addParticipantBtn" type="button">Add object</button>
+            </div>
+            <p class="hint">Adjust type, radius, and mass for each rolling object. Hollow cylinders have the slowest acceleration.</p>
+            <div class="participant-table">
+              <div class="table-head">
+                <span>Name</span>
+                <span>Type</span>
+                <span>Radius (m)</span>
+                <span>Mass (kg)</span>
+                <span></span>
+              </div>
+              <div id="participantsList"></div>
+            </div>
+          </section>
+
+          <section id="resultsSection" class="race-card">
+            <h3>Predicted Results</h3>
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rank</th>
+                  <th scope="col">Object</th>
+                  <th scope="col">Acceleration (m/s²)</th>
+                  <th scope="col">Time (s)</th>
+                  <th scope="col">Final speed (m/s)</th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody">
+                <tr>
+                  <td colspan="5" class="empty">Add two or more objects to compare race times.</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
       </div>
     </section>
-  </div>
+  </main>
+
+  <footer class="page-footer">
+    <p>Use the tabs to switch between cross-sectional properties and rotational dynamics explorations.</p>
+  </footer>
+
   <script src="app.js"></script>
+  <script src="MOI_alpha/app.js"></script>
+  <script src="tabs.js"></script>
+  <script src="race.js"></script>
 </body>
 </html>

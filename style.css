@@ -1,26 +1,128 @@
 :root {
   color-scheme: light dark;
   font-family: "Segoe UI", Tahoma, sans-serif;
-  background-color: #f7f7fb;
-  color: #222;
+  background-color: #f5f6fb;
+  color: #1f2933;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  padding: 1.5rem;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  min-height: 100vh;
+  background-color: inherit;
+  color: inherit;
 }
 
-h1 {
-  margin: 0;
-  font-size: 1.8rem;
+.page-header {
+  padding: 2rem 1.5rem 0;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-#app {
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.tablist {
+  display: inline-flex;
+  align-self: center;
+  gap: 0.75rem;
+  background: rgba(37, 99, 235, 0.08);
+  padding: 0.35rem;
+  border-radius: 999px;
+}
+
+.tab-button {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #1f2937;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tab-button.is-active {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+}
+
+.page-main {
+  flex: 1;
+  width: 100%;
+  padding: 0 1.5rem 2rem;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.is-active {
+  display: block;
+}
+
+.page-footer {
+  padding: 1.25rem 1.5rem 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+button {
+  padding: 0.55rem 0.95rem;
+  border-radius: 0.55rem;
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+button.secondary {
+  background: #f3f4f6;
+  color: #1f2937;
+  border-color: #d1d5db;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+button:not(:disabled):hover {
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
+  transform: translateY(-1px);
+}
+
+input,
+select {
+  font-family: inherit;
+  color: inherit;
+}
+
+/*****************************
+ * Section Explorer (Area)
+ *****************************/
+#areaExplorer {
   display: grid;
   gap: 1.25rem;
   grid-template-columns: minmax(240px, auto) minmax(220px, 1fr) minmax(220px, 1fr);
@@ -30,6 +132,20 @@ h1 {
     "controls properties mohr";
   align-items: flex-start;
   justify-content: center;
+}
+
+#areaExplorer section {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+#howToSection {
+  grid-area: howto;
 }
 
 #shapeCanvas {
@@ -48,10 +164,6 @@ h1 {
   justify-self: center;
 }
 
-#howToSection {
-  grid-area: howto;
-}
-
 #controlsSection {
   grid-area: controls;
 }
@@ -66,17 +178,7 @@ h1 {
   align-self: flex-start;
 }
 
-section {
-  background-color: #fff;
-  border-radius: 0.75rem;
-  padding: 1rem 1.25rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-section h2 {
+#areaExplorer h2 {
   font-size: 1.1rem;
   margin: 0;
 }
@@ -107,97 +209,25 @@ section h2 {
   gap: 0.5rem;
 }
 
-button {
-  padding: 0.5rem 0.9rem;
-  border-radius: 0.5rem;
-  border: 1px solid #2563eb;
-  background: #2563eb;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-button.secondary {
-  background: #f3f4f6;
-  color: #1f2937;
-  border-color: #d1d5db;
-}
-
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-  transform: none;
-  box-shadow: none;
-}
-
-button:not(:disabled):hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
-}
-
-#status {
-  font-size: 0.95rem;
-  line-height: 1.4;
-  background-color: #eff6ff;
-  border-left: 4px solid #2563eb;
-  padding: 0.75rem 1rem;
-  border-radius: 0.4rem;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 0.45rem 0.3rem;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-  font-size: 0.9rem;
-}
-
-th {
-  font-size: 0.85rem;
-  color: #4b5563;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 .inertia-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 0.92rem;
 }
 
-.inertia-table thead th {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #4b5563;
-}
-
-.inertia-table tbody th {
+.inertia-table th,
+.inertia-table td {
+  padding: 0.55rem 0.65rem;
+  border-bottom: 1px solid #e5e7eb;
   text-align: left;
-  font-size: 0.95rem;
-  color: #111827;
-}
-
-.inertia-table tbody td {
-  font-variant-numeric: tabular-nums;
-}
-
-.inertia-table tbody tr:last-child td {
-  border-bottom: none;
 }
 
 .properties-summary {
-  margin-top: 1rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.45rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.65rem;
 }
 
 .summary-row {
@@ -246,8 +276,182 @@ th {
   color: #4b5563;
 }
 
+/*****************************
+ * Rotational Dynamics Panel
+ *****************************/
+#dynamicsApp {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  grid-template-areas:
+    "heading heading heading"
+    "shapeA shapeB controls";
+  align-items: start;
+}
+
+#dynamicsApp .panel-heading {
+  grid-area: heading;
+}
+
+#drawSectionA {
+  grid-area: shapeA;
+}
+
+#drawSectionB {
+  grid-area: shapeB;
+}
+
+#controlSection {
+  grid-area: controls;
+  position: sticky;
+  top: 1.5rem;
+  align-self: start;
+}
+
+#dynamicsApp .panel-heading {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#dynamicsApp .panel-heading h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+#dynamicsApp .panel-heading p {
+  margin: 0;
+  font-size: 0.96rem;
+  color: #4b5563;
+}
+
+#dynamicsApp section {
+  background-color: #ffffff;
+  border-radius: 0.85rem;
+  padding: 1.2rem 1.4rem;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#drawSectionA canvas,
+#drawSectionB canvas {
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  background-color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
+  cursor: crosshair;
+  touch-action: none;
+  margin: 0 auto;
+}
+
+#drawSectionA,
+#drawSectionB {
+  min-width: 0;
+}
+
+#dynamicsApp .section-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #1d4ed8;
+}
+
+#dynamicsApp .section-header p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #4b5563;
+}
+
+#dynamicsApp .button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+#dynamicsApp .control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+#dynamicsApp .control-label {
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+#dynamicsApp .control-pair {
+  display: grid;
+  grid-template-columns: 1fr minmax(100px, 120px);
+  gap: 0.6rem;
+  align-items: center;
+}
+
+#dynamicsApp .control input[type="number"] {
+  font-size: 1rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.55rem;
+  border: 1px solid #cbd5e1;
+}
+
+#dynamicsApp .control input[type="range"] {
+  accent-color: #2563eb;
+}
+
+#dynamicsApp .status {
+  font-size: 0.92rem;
+  color: #334155;
+  border-left: 3px solid #2563eb;
+  padding: 0.6rem 0.75rem;
+  background-color: rgba(37, 99, 235, 0.08);
+  border-radius: 0.5rem;
+}
+
+#dynamicsApp .shape-info {
+  display: grid;
+  gap: 0.5rem;
+  background-color: #f8fafc;
+  border-radius: 0.6rem;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.92rem;
+}
+
+#dynamicsApp .shape-info .info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+#dynamicsApp .shape-info .label {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+#dynamicsApp .shape-info .value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #1d4ed8;
+}
+
+#dynamicsApp .shape-info .value.highlighted {
+  background-color: rgba(248, 113, 113, 0.18);
+  color: #b91c1c;
+  border-radius: 0.4rem;
+  padding: 0.1rem 0.3rem;
+}
+
+/*****************************
+ * Responsive adjustments
+ *****************************/
 @media (max-width: 900px) {
-  #app {
+  #areaExplorer {
     grid-template-columns: 1fr;
     grid-template-areas:
       "howto"
@@ -261,6 +465,25 @@ th {
     max-width: 100%;
     justify-self: stretch;
   }
+
+  #dynamicsApp {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "heading"
+      "shapeA"
+      "shapeB"
+      "controls";
+  }
+
+  #controlSection {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  #dynamicsApp .control-pair {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 600px) {
@@ -269,10 +492,36 @@ th {
   }
 }
 
+/*****************************
+ * Dark theme adjustments
+ *****************************/
 @media (prefers-color-scheme: dark) {
   :root {
-    background-color: #111827;
-    color: #f9fafb;
+    background-color: #0f172a;
+    color: #f1f5f9;
+  }
+
+  .tablist {
+    background: rgba(37, 99, 235, 0.25);
+  }
+
+  .tab-button {
+    color: #dbeafe;
+  }
+
+  .tab-button.is-active {
+    background: #1d4ed8;
+    color: #ffffff;
+  }
+
+  .page-footer {
+    color: #cbd5f5;
+  }
+
+  #areaExplorer section,
+  #dynamicsApp section {
+    background-color: #111c30;
+    box-shadow: 0 12px 32px rgba(2, 6, 23, 0.6);
   }
 
   #shapeCanvas {
@@ -280,38 +529,19 @@ th {
     border-color: #374151;
   }
 
-  section {
-    background-color: #1f2937;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
-  }
-
   #mohrCanvas {
     background-color: #0f172a;
     border-color: #334155;
   }
 
-  .inertia-table thead th {
-    color: #94a3b8;
-  }
-
-  .inertia-table tbody th {
-    color: #e5e7eb;
-  }
-
-  .properties-summary {
-    border-top-color: #374151;
-  }
-
-  .summary-label {
-    color: #f9fafb;
-  }
-
-  .mohr-legend {
-    color: #f9fafb;
+  .mohr-legend,
+  .summary-label,
+  #dynamicsApp .panel-heading p {
+    color: #cbd5f5;
   }
 
   .mohr-caption {
-    color: #e5e7eb;
+    color: #d1d5db;
   }
 
   button.secondary {
@@ -320,13 +550,302 @@ th {
     border-color: #4b5563;
   }
 
-  th,
-  td {
+  .inertia-table th,
+  .inertia-table td {
     border-bottom-color: #374151;
   }
 
   #status {
     background-color: rgba(37, 99, 235, 0.2);
     border-left-color: #60a5fa;
+  }
+
+  #dynamicsApp .status {
+    background-color: rgba(59, 130, 246, 0.25);
+    border-left-color: #60a5fa;
+  }
+
+  #dynamicsApp .shape-info {
+    background-color: rgba(30, 41, 59, 0.75);
+  }
+
+  #dynamicsApp .shape-info .label {
+    color: #e2e8f0;
+  }
+
+  #dynamicsApp .shape-info .value {
+    color: #bfdbfe;
+  }
+
+#dynamicsApp .shape-info .value.highlighted {
+  background-color: rgba(248, 113, 113, 0.35);
+  color: #fecaca;
+}
+}
+
+/*****************************
+ * Rolling Race Panel
+ *****************************/
+#raceApp {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.race-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1rem;
+}
+
+.race-header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.race-header p {
+  margin: 0;
+  font-size: 0.96rem;
+  color: #4b5563;
+}
+
+.race-grid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: minmax(240px, 320px) minmax(240px, 320px) minmax(260px, 360px);
+  grid-template-areas:
+    "ramp participants results";
+  align-items: start;
+}
+
+#rampSettings {
+  grid-area: ramp;
+}
+
+#participantsSection {
+  grid-area: participants;
+}
+
+#resultsSection {
+  grid-area: results;
+}
+
+.race-card {
+  background-color: #ffffff;
+  border-radius: 0.85rem;
+  padding: 1.2rem 1.35rem;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.race-card h3 {
+  margin: 0;
+  font-size: 1.12rem;
+  color: #1d4ed8;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.control-group label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: 0.94rem;
+}
+
+.race-card .control-pair {
+  display: grid;
+  grid-template-columns: 1fr minmax(80px, 110px);
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.race-card input[type="number"],
+.race-card input[type="range"] {
+  font-size: 0.95rem;
+}
+
+.race-card input[type="number"] {
+  padding: 0.4rem 0.55rem;
+  border-radius: 0.5rem;
+  border: 1px solid #cbd5e1;
+}
+
+.race-card input[type="range"] {
+  accent-color: #2563eb;
+}
+
+.ramp-summary {
+  display: grid;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  background-color: #f8fafc;
+  border-radius: 0.6rem;
+  font-size: 0.92rem;
+}
+
+.ramp-summary .label {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.ramp-summary .value {
+  font-variant-numeric: tabular-nums;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.participants-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.participants-header h3 {
+  margin: 0;
+}
+
+.participants-header button {
+  padding: 0.45rem 0.85rem;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.participant-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.participant-table .table-head,
+.participant-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(160px, 1fr) repeat(2, minmax(80px, 90px)) 40px;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+}
+
+.participant-table .table-head {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.participant-row select,
+.participant-row input[type="number"] {
+  width: 100%;
+  padding: 0.4rem 0.55rem;
+  border-radius: 0.5rem;
+  border: 1px solid #cbd5e1;
+  font-size: 0.92rem;
+}
+
+.participant-row button {
+  padding: 0.35rem;
+  border-radius: 0.4rem;
+  width: 100%;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.94rem;
+}
+
+.results-table th,
+.results-table td {
+  padding: 0.55rem 0.65rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.results-table tbody tr.leader {
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.results-table .empty {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+}
+
+@media (max-width: 1100px) {
+  .race-grid {
+    grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr);
+    grid-template-areas:
+      "ramp ramp"
+      "participants results";
+  }
+}
+
+@media (max-width: 760px) {
+  .race-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "ramp"
+      "participants"
+      "results";
+  }
+
+  .race-card .control-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .participant-table .table-head,
+  .participant-row {
+    grid-template-columns: minmax(120px, 1fr) minmax(140px, 1fr) repeat(2, 1fr) 40px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  #raceApp .race-card {
+    background-color: #111c30;
+    box-shadow: 0 12px 32px rgba(2, 6, 23, 0.6);
+  }
+
+  .race-header p,
+  .hint {
+    color: #cbd5f5;
+  }
+
+  .race-card input[type="number"] {
+    background-color: #0f172a;
+    color: inherit;
+    border-color: #334155;
+  }
+
+  .ramp-summary {
+    background-color: rgba(30, 41, 59, 0.75);
+  }
+
+  .participant-table .table-head {
+    color: #dbeafe;
+  }
+
+  .results-table th,
+  .results-table td {
+    border-bottom-color: #334155;
+  }
+
+  .results-table .empty {
+    color: #9ca3af;
   }
 }

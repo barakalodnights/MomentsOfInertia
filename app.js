@@ -1,3 +1,4 @@
+(() => {
 const canvas = document.getElementById('shapeCanvas');
 const ctx = canvas.getContext('2d');
 const completeBtn = document.getElementById('completeBtn');
@@ -727,3 +728,13 @@ window.addEventListener('resize', () => {
 resizeCanvas();
 resizeMohrCanvas();
 resetCanvas();
+
+window.SectionExplorer = {
+  activate() {
+    resizeCanvas();
+    resizeMohrCanvas();
+    draw();
+  },
+};
+
+})();
