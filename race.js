@@ -38,6 +38,7 @@
     solidSphere: { label: 'Solid sphere', ratio: 2 / 5 },
     solidCylinder: { label: 'Solid cylinder', ratio: 1 / 2 },
     hollowCylinder: { label: 'Hollow cylinder (hoop)', ratio: 1 },
+    hollowSphere: { label: 'Hollow sphere', ratio: 2 / 3 },
   };
 
   const COLOR_PALETTE = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316'];
@@ -156,6 +157,18 @@
     };
   }
 
+  function computeMomentOfInertia(participant) {
+    const typeInfo = TYPE_DATA[participant.type];
+    if (!typeInfo) {
+      return null;
+    }
+    const inertia = typeInfo.ratio * participant.mass * participant.radius * participant.radius;
+    if (!Number.isFinite(inertia)) {
+      return null;
+    }
+    return inertia;
+  }
+
   function renderParticipants() {
     participantsList.innerHTML = '';
 
@@ -173,6 +186,18 @@
       });
       row.appendChild(nameInput);
 
+      const inertiaDisplay = document.createElement('span');
+      inertiaDisplay.className = 'moment-of-inertia';
+      inertiaDisplay.setAttribute('aria-live', 'polite');
+      const updateInertiaDisplay = () => {
+        const inertia = computeMomentOfInertia(participant);
+        if (inertia === null) {
+          inertiaDisplay.textContent = 'Moment of inertia: --';
+          return;
+        }
+        inertiaDisplay.textContent = `Moment of inertia: ${inertia.toFixed(3)} kg*m^2`;
+      };
+
       const typeSelect = document.createElement('select');
       Object.entries(TYPE_DATA).forEach(([value, info]) => {
         const option = document.createElement('option');
@@ -186,36 +211,76 @@
       typeSelect.addEventListener('change', () => {
         participant.type = typeSelect.value;
         updateResults();
+        updateInertiaDisplay();
       });
       row.appendChild(typeSelect);
 
+      const radiusContainer = document.createElement('div');
+      radiusContainer.className = 'range-input';
       const radiusInput = document.createElement('input');
-      radiusInput.type = 'number';
-      radiusInput.min = '0.01';
-      radiusInput.max = '1.00';
-      radiusInput.step = '0.01';
+      radiusInput.type = 'range';
+      radiusInput.min = '0.05';
+      radiusInput.max = '0.16';
+      radiusInput.step = '0.005';
+      const radiusValue = document.createElement('span');
+      radiusValue.className = 'range-value';
+      const syncRadius = () => {
+        radiusValue.textContent = `${participant.radius.toFixed(3)} m`;
+      };
+      const initializeRadius = () => {
+        const clamped = clamp(participant.radius, Number(radiusInput.min), Number(radiusInput.max));
+        participant.radius = Number(clamped.toFixed(3));
+        radiusInput.value = String(participant.radius);
+        syncRadius();
+      };
       radiusInput.value = String(participant.radius);
       radiusInput.addEventListener('input', () => {
-        const value = clamp(Number(radiusInput.value), 0.01, 1);
+        const value = clamp(Number(radiusInput.value), Number(radiusInput.min), Number(radiusInput.max));
         participant.radius = Number(value.toFixed(3));
         radiusInput.value = String(participant.radius);
+        syncRadius();
         updateResults();
+        updateInertiaDisplay();
       });
-      row.appendChild(radiusInput);
+      radiusContainer.appendChild(radiusInput);
+      radiusContainer.appendChild(radiusValue);
+      row.appendChild(radiusContainer);
 
+      const massContainer = document.createElement('div');
+      massContainer.className = 'range-input';
       const massInput = document.createElement('input');
-      massInput.type = 'number';
+      massInput.type = 'range';
       massInput.min = '0.1';
       massInput.max = '50';
       massInput.step = '0.1';
+      const massValue = document.createElement('span');
+      massValue.className = 'range-value';
+      const syncMass = () => {
+        massValue.textContent = `${participant.mass.toFixed(2)} kg`;
+      };
+      const initializeMass = () => {
+        const clamped = clamp(participant.mass, Number(massInput.min), Number(massInput.max));
+        participant.mass = Number(clamped.toFixed(3));
+        massInput.value = String(participant.mass);
+        syncMass();
+      };
       massInput.value = String(participant.mass);
       massInput.addEventListener('input', () => {
-        const value = clamp(Number(massInput.value), 0.1, 50);
+        const value = clamp(Number(massInput.value), Number(massInput.min), Number(massInput.max));
         participant.mass = Number(value.toFixed(3));
         massInput.value = String(participant.mass);
+        syncMass();
         updateResults();
+        updateInertiaDisplay();
       });
-      row.appendChild(massInput);
+      massContainer.appendChild(massInput);
+      massContainer.appendChild(massValue);
+      row.appendChild(massContainer);
+      row.appendChild(inertiaDisplay);
+
+      initializeRadius();
+      initializeMass();
+      updateInertiaDisplay();
 
       const removeBtn = document.createElement('button');
       removeBtn.type = 'button';
@@ -422,13 +487,31 @@
       raceCtx.lineTo(endX, endY - 24);
       raceCtx.stroke();
 
-      raceCtx.beginPath();
-      raceCtx.fillStyle = color;
-      raceCtx.strokeStyle = '#1f2937';
-      raceCtx.lineWidth = 1.5;
-      raceCtx.arc(drawX, drawY, radiusPx, 0, Math.PI * 2);
-      raceCtx.fill();
-      raceCtx.stroke();
+      const isHoop = metric.participant.type === 'hollowCylinder';
+      if (isHoop) {
+        const ringWidth = Math.max(6, radiusPx * 0.35);
+        const ringRadius = Math.max(radiusPx - ringWidth / 2, 4);
+
+        raceCtx.lineWidth = ringWidth;
+        raceCtx.strokeStyle = color;
+        raceCtx.beginPath();
+        raceCtx.arc(drawX, drawY, ringRadius, 0, Math.PI * 2);
+        raceCtx.stroke();
+
+        raceCtx.lineWidth = 1.5;
+        raceCtx.strokeStyle = '#1f2937';
+        raceCtx.beginPath();
+        raceCtx.arc(drawX, drawY, ringRadius + ringWidth / 2, 0, Math.PI * 2);
+        raceCtx.stroke();
+      } else {
+        raceCtx.beginPath();
+        raceCtx.fillStyle = color;
+        raceCtx.strokeStyle = '#1f2937';
+        raceCtx.lineWidth = 1.5;
+        raceCtx.arc(drawX, drawY, radiusPx, 0, Math.PI * 2);
+        raceCtx.fill();
+        raceCtx.stroke();
+      }
 
       const traveledDistance = rampState.length * frac;
       const radiusMeters = Math.max(metric.participant.radius, 0.01);
